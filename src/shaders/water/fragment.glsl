@@ -39,7 +39,7 @@ void main()
         viewDirection,  //view Direction
         30.0,            //Power of Specular
         vPosition,      //position
-        0.95            //decay
+        0.90            //decay
 
 
     );

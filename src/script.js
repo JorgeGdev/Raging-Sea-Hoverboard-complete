@@ -4,7 +4,9 @@ import GUI from 'lil-gui'
 import waterVertexShader from './shaders/water/vertex.glsl'
 import waterFragmentShader from './shaders/water/fragment.glsl'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+
+
+
 
 
 
@@ -41,20 +43,20 @@ const gltfloader = new GLTFLoader()
 
 
 
+//TEDDY BEAR MODEL
 
-
-let hoverboard = null
-let mixer = null
+let teddyBear = null
+//let mixer = null
 
 gltfloader.load(
-    "./models/hoverboard/scene.gltf",
+    "./models/bear/teddy__bear.glb",
 
     (gltf) =>
     {
 
-        mixer = new THREE.AnimationMixer(gltf.scene)
-        const action = mixer.clipAction(gltf.animations[0])
-        action.play()
+        // mixer = new THREE.AnimationMixer(gltf.scene)
+        // const action = mixer.clipAction(gltf.animations[0])
+        // action.play()
 
 
 
@@ -63,11 +65,13 @@ gltfloader.load(
 
 
 
-        hoverboard = gltf.scene
-        scene.add(hoverboard)
+        teddyBear = gltf.scene
+        scene.add(teddyBear)
 
-        hoverboard.scale.set(0.4, 0.4, 0.4)
-        hoverboard.rotation.y = 2
+        teddyBear.scale.set(0.05, 0.05, 0.05)
+        teddyBear.position.y = - 0.15
+        teddyBear.rotation.x = - Math.PI /2
+        teddyBear.rotation.z = Math.PI /0.5 
 
     },
 
@@ -76,32 +80,74 @@ gltfloader.load(
 
 
 )
-const hoverboardlight = new THREE.DirectionalLight( 0xFFFFFF, 2 );
-hoverboardlight.position.set(-0.62, 0, 1.08)
-hoverboardlight.target.position.set(1.84, 2.16, -0.62);
-scene.add( hoverboardlight );
-scene.add(hoverboardlight.target)
+
+
+//DUCK MODEL
+
+
+
+
+let duck = null
+//let mixer = null
+
+gltfloader.load(
+    "./models/Duck/Duck.gltf",
+
+    (gltf) =>
+    {
+
+        duck = gltf.scene
+        scene.add(duck)
+
+        duck.scale.set(0.2, 0.2, 0.2)
+        duck.position.y = - 0.15
+        duck.position.x = 3
+        duck.rotation.x = - Math.PI /2
+        duck.rotation.z = Math.PI /0.5 
+
+    },
+
+    
+    
+
+
+)
+
+
+
+
+const teddyBearlight = new THREE.DirectionalLight( 0xFFFFFF, 2 );
+teddyBearlight.position.set(-0.62, 0, 1.08)
+teddyBearlight.target.position.set(1.84, 2.16, -0.62);
+scene.add( teddyBearlight );
+scene.add(teddyBearlight.target)
+
+const teddyBearlight2 = new THREE.DirectionalLight( 0xFFFFFF, 2 );
+teddyBearlight2.position.set(-0.62, 5, 1.8)
+teddyBearlight2.target.position.set(1.84, 2.16, -0.62);
+scene.add( teddyBearlight2 );
+scene.add(teddyBearlight2.target)
 
 // // Añadir control para la intensidad de la luz
 // const lightFolder = gui.addFolder('Directional Light');
-// lightFolder.add(hoverboardlight, 'intensity', 0, 2).name('Intensity').listen();
+// lightFolder.add(teddyBearlight2, 'intensity', 0, 2).name('Intensity').listen();
 
 // // Añadir control para la posición de la luz
-// lightFolder.add(hoverboardlight.position, 'x', -10, 10).name('Position X').listen();
-// lightFolder.add(hoverboardlight.position, 'y', 0, 20).name('Position Y').listen();
-// lightFolder.add(hoverboardlight.position, 'z', -10, 10).name('Position Z').listen();
+// lightFolder.add(teddyBearlight2.position, 'x', -10, 10).name('Position X').listen();
+// lightFolder.add(teddyBearlight2.position, 'y', 0, 20).name('Position Y').listen();
+// lightFolder.add(teddyBearlight2.position, 'z', -10, 10).name('Position Z').listen();
 
 // // Añadir control para la posición del target
-// lightFolder.add(hoverboardlight.target.position, 'x', -10, 10).name('Target X').listen();
-// lightFolder.add(hoverboardlight.target.position, 'y', -10, 10).name('Target Y').listen();
-// lightFolder.add(hoverboardlight.target.position, 'z', -10, 10).name('Target Z').listen();
+// lightFolder.add(teddyBearlight.target.position, 'x', -10, 10).name('Target X').listen();
+// lightFolder.add(teddyBearlight.target.position, 'y', -10, 10).name('Target Y').listen();
+// lightFolder.add(teddyBearlight.target.position, 'z', -10, 10).name('Target Z').listen();
 
 // lightFolder.open();  // Abre el folder por defecto para mayor visibilidad
 
 
 
 
-// const helper = new THREE.DirectionalLightHelper( hoverboardlight, 0.25 );
+// const helper = new THREE.DirectionalLightHelper( teddyBearlight2, 0.25 );
 // scene.add( helper );
 /**
  * Water
@@ -112,8 +158,8 @@ waterGeometry.deleteAttribute("normal")
 waterGeometry.deleteAttribute("uv")
 
 // Colors
-debugObject.depthColor = '#ff4000'
-debugObject.surfaceColor = '#151c37'
+debugObject.depthColor = '#4d60ef'
+debugObject.surfaceColor = '#343d60'
 
 gui.addColor(debugObject, 'depthColor').onChange(() => { waterMaterial.uniforms.uDepthColor.value.set(debugObject.depthColor) })
 gui.addColor(debugObject, 'surfaceColor').onChange(() => { waterMaterial.uniforms.uSurfaceColor.value.set(debugObject.surfaceColor) })
@@ -205,6 +251,35 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+
+
+
+
+// Audio setup
+const listener = new THREE.AudioListener();
+camera.add(listener);
+const sound = new THREE.Audio(listener);
+const audioLoader = new THREE.AudioLoader();  // Asegúrate de que esta línea esté antes del bloque de evento
+
+// Añadir un manejador de eventos que iniciará la carga y reproducción de audio al hacer clic
+document.addEventListener('click', () => {
+    audioLoader.load('models/music2.wav', function(buffer) {
+        sound.setBuffer(buffer);
+        sound.setLoop(true);
+        sound.setVolume(0.5);
+        sound.play();
+    }, 
+    undefined, // Función para el manejo de progreso (opcional)
+    function (err) { // Función para manejo de errores
+        console.error('Error loading audio:', err);
+    });
+});
+
+
+
+
+
+
 /**
  * Animate
  */
@@ -220,25 +295,36 @@ const tick = () =>
     // Water
     waterMaterial.uniforms.uTime.value = elapsedTime
 
-    //MOVEMENT HOVERBOARD
+    //MOVEMENT teddyBear
 
     // Rotate objects
-    if(hoverboard)
+    if(teddyBear)
     {
-        //hoverboard.rotation.x = - elapsedTime * 0.1
-        hoverboard.rotation.x = Math.sin(elapsedTime * 2) * 0.25 
-        hoverboard.rotation.z = Math.sin(elapsedTime ) * 0.15 
-        hoverboard.rotation.y = Math.sin(elapsedTime  * 2) * 0.15 
+        teddyBear.rotation.x = - elapsedTime * 0.1
+        //teddyBear.rotation.x = Math.sin(elapsedTime) * 0.25 
+        teddyBear.rotation.z = Math.sin(elapsedTime ) * 0.15 
+        teddyBear.position.x =  0.1 - Math.sin(elapsedTime * 0.2) *0.25
 
     }
 
-    //update mixer
 
-    if(mixer !== null)
+    // Rotate objects
+    if(duck)
     {
-        mixer.update(deltaTime)
+        duck.rotation.x = elapsedTime * 0.5
+        duck.position.x = -0.3 - Math.sin(elapsedTime * 0.2) *0.25
+        duck.rotation.z =  - Math.sin(elapsedTime ) * 0.15 
+        
 
     }
+
+    // //update mixer
+
+    // if(mixer !== null)
+    // {
+    //     mixer.update(deltaTime)
+
+    // }
 
 
 
